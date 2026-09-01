@@ -6,7 +6,7 @@ import java.util.Properties;
 
 public class FieldProperties {
 
-    private static final String PROPERTY_FILE =
+    private static final String FILE_PATH =
         "/TFEEAPP/base_domain/base_domain/Utilities/properties/Field.properties";
 
     private final Properties properties;
@@ -16,13 +16,13 @@ public class FieldProperties {
         properties = new Properties();
 
         System.out.println(
-            "Loading properties from:"
+            "Loading Field.properties:"
         );
 
-        System.out.println(PROPERTY_FILE);
+        System.out.println(FILE_PATH);
 
         InputStream input =
-            new FileInputStream(PROPERTY_FILE);
+            new FileInputStream(FILE_PATH);
 
         try {
 
@@ -34,7 +34,7 @@ public class FieldProperties {
         }
 
         System.out.println(
-            "Field.properties loaded successfully."
+            "Field.properties loaded."
         );
     }
 
@@ -43,7 +43,7 @@ public class FieldProperties {
         return properties.getProperty(key);
     }
 
-    public String getRequired(String key)
+    public String required(String key)
             throws Exception {
 
         String value =
@@ -53,7 +53,7 @@ public class FieldProperties {
             value.trim().length() == 0) {
 
             throw new Exception(
-                "Required property not found: " + key
+                "Missing property: " + key
             );
         }
 
@@ -63,10 +63,5 @@ public class FieldProperties {
     public boolean contains(String key) {
 
         return properties.containsKey(key);
-    }
-
-    public Properties getProperties() {
-
-        return properties;
     }
 }
