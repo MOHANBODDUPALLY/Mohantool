@@ -2,22 +2,17 @@ package rates_upd;
 
 public class ProcessConfig {
 
+    private String processName;
     private String processKey;
 
     private String referenceField;
-
     private String inputFieldProperty;
-
     private String databaseFieldProperty;
-
     private String module;
-
     private String updateCondition;
-
     private String functionNames;
 
     private String[] inputFields;
-
     private String[] databaseFields;
 
     public static ProcessConfig load(
@@ -25,28 +20,23 @@ public class ProcessConfig {
             String processName)
             throws Exception {
 
-        String processKey =
+        String key =
             "mercury_exim." + processName;
 
-        String processValue =
-            fp.getRequired(processKey);
+        String definition =
+            fp.required(key);
 
         String[] parts =
-            processValue.split(",", -1);
-
-        if (parts.length < 2) {
-
-            throw new Exception(
-                "Invalid process configuration: "
-                + processKey
-            );
-        }
+            definition.split(",", -1);
 
         ProcessConfig config =
             new ProcessConfig();
 
+        config.processName =
+            processName;
+
         config.processKey =
-            processKey;
+            key;
 
         config.referenceField =
             parts[0].trim();
@@ -54,52 +44,45 @@ public class ProcessConfig {
         config.inputFieldProperty =
             parts[1].trim();
 
-        if (parts.length >= 3) {
-
+        if (parts.length > 2) {
             config.databaseFieldProperty =
                 parts[2].trim();
         }
 
-        if (parts.length >= 4) {
-
+        if (parts.length > 3) {
             config.module =
                 parts[3].trim();
         }
 
-        if (parts.length >= 5) {
-
+        if (parts.length > 4) {
             config.updateCondition =
                 parts[4].trim();
         }
 
-        if (parts.length >= 7) {
-
+        if (parts.length > 6) {
             config.functionNames =
                 parts[6].trim();
         }
 
-        String inputFieldValue =
-            fp.getRequired(
-                config.inputFieldProperty
-            );
-
-        String dbFieldValue =
-            fp.getRequired(
-                config.databaseFieldProperty
-            );
-
         config.inputFields =
-            splitFields(inputFieldValue);
+            split(
+                fp.required(
+                    config.inputFieldProperty
+                )
+            );
 
         config.databaseFields =
-            splitFields(dbFieldValue);
+            split(
+                fp.required(
+                    config.databaseFieldProperty
+                )
+            );
 
         if (config.inputFields.length !=
             config.databaseFields.length) {
 
             throw new Exception(
-                "Input field count and DB field count "
-                + "do not match for process: "
+                "Field count mismatch for "
                 + processName
             );
         }
@@ -107,21 +90,25 @@ public class ProcessConfig {
         return config;
     }
 
-    private static String[] splitFields(
+    private static String[] split(
             String value) {
 
-        String[] fields =
+        String[] result =
             value.split(",");
 
         for (int i = 0;
-             i < fields.length;
+             i < result.length;
              i++) {
 
-            fields[i] =
-                fields[i].trim();
+            result[i] =
+                result[i].trim();
         }
 
-        return fields;
+        return result;
+    }
+
+    public String getProcessName() {
+        return processName;
     }
 
     public String getProcessKey() {
