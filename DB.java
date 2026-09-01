@@ -20,22 +20,18 @@ public class DB {
                 new FieldProperties();
 
             String driver =
-                fp.getRequired("db.driver");
+                fp.required("db.driver");
 
             String url =
-                fp.getRequired("db.url");
+                fp.required("db.url");
 
             String username =
-                fp.getRequired("db.username");
+                fp.required("db.username");
 
             String password =
-                fp.getRequired("db.password");
+                fp.required("db.password");
 
             Class.forName(driver);
-
-            System.out.println(
-                "Connecting to Oracle DB..."
-            );
 
             connection =
                 DriverManager.getConnection(
@@ -47,7 +43,7 @@ public class DB {
             connection.setAutoCommit(false);
 
             System.out.println(
-                "Database connection successful."
+                "Oracle connection established."
             );
         }
 
@@ -62,15 +58,13 @@ public class DB {
                 !connection.isClosed()) {
 
                 connection.close();
-
-                System.out.println(
-                    "Database connection closed."
-                );
             }
 
         } catch (Exception e) {
 
             e.printStackTrace();
         }
+
+        connection = null;
     }
 }
